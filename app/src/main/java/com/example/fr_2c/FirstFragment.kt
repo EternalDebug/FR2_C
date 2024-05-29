@@ -28,7 +28,7 @@ class FirstFragment : Fragment() {
     ): View? {
 
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
-        (activity as AppCompatActivity).supportActionBar?.title = "Pull of actual news"
+        //(activity as AppCompatActivity).supportActionBar?.title = "Pull of actual news"
         val recyclerView: RecyclerView = _binding!!.rcView
         binding.apply { recyclerView.layoutManager = LinearLayoutManager(context); recyclerView.adapter = adaptator}
         return binding.root

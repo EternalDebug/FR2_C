@@ -16,13 +16,18 @@ class Adaptator : RecyclerView.Adapter<Adaptator.TaskHolder>(){
     class TaskHolder(item: View) : RecyclerView.ViewHolder(item) {
         val binding = NewsOneBinding.bind(item)
         fun bind(task: Articles, pos: Int) = with(binding) {
-            binding.textView.setText(task.title);
+            binding.textView.setText(task.author);
+            binding.textView2.setText(task.title);
 
-            val txt = binding.textView//itemView.findViewById<TextView>(R.id.textView_CA)
+            val txt = binding.textView2//itemView.findViewById<TextView>(R.id.textView_CA)
             txt.setOnClickListener {
                 //code_req = task.urlpath!!;
 
                 txt.findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            }
+
+            binding.button.setOnClickListener{
+                adaptator.removeNews(pos);
             }
 
 
@@ -49,6 +54,11 @@ class Adaptator : RecyclerView.Adapter<Adaptator.TaskHolder>(){
         notifyDataSetChanged()
     }
 
+    fun removeNews(pos: Int){
+        this.NewsList.removeAt(pos);
+        notifyDataSetChanged();
+    }
+
     /*fun TestInit(){
         NewsList.add(Data("Title1"));
         NewsList.add(Data("Title2"));
@@ -58,8 +68,9 @@ class Adaptator : RecyclerView.Adapter<Adaptator.TaskHolder>(){
     }*/
 
     fun TestInit(){
-        NewsList.add(Articles("Hui", "Title1"));
-        NewsList.add(Articles("Hui", "Title2"))
-        NewsList.add(Articles("Hui", "Title3"))
+        NewsList.add(Articles("Wasya", "Title1 GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"));
+        NewsList.add(Articles("Petya", "Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2"))
+        NewsList.add(Articles("Nastya", "Title3  TestTestTestTest TestTestTestTest TestTestTestTest TestTestTestTest TestTestTestTest TestTestTestTest"))
+        NewsList.add(Articles("Wasya", "Title1 GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"));
     }
 }
