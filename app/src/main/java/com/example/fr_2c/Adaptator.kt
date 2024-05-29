@@ -44,6 +44,11 @@ class Adaptator : RecyclerView.Adapter<Adaptator.TaskHolder>(){
         holder.bind(NewsList[position], position)
     }
 
+    fun updateNewsList(news: List<Articles>) {
+        this.NewsList = news.toMutableList()
+        notifyDataSetChanged()
+    }
+
     /*fun TestInit(){
         NewsList.add(Data("Title1"));
         NewsList.add(Data("Title2"));

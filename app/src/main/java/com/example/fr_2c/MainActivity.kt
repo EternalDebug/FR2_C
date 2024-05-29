@@ -9,14 +9,18 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import androidx.lifecycle.Observer
 import com.example.fr_2c.databinding.ActivityMainBinding
 
 var adaptator = Adaptator();
+
+lateinit var viewModel: AppViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private val retrofitService = ExternalApiService.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,8 +32,15 @@ class MainActivity : AppCompatActivity() {
         binding.toolbar.subtitle = "Actual News:";
         //binding.toolbar.setTitle("Actual News:") //.title = "Actual News:";
 
+        viewModel = AppViewModel(RetroRepository(retrofitService));
+
         adaptator.TestInit();
+        viewModel.newsList.observe(this, Observer {
+            adaptator.updateNewsList(it);
+        })
         //adaptator.notifyDataSetChanged();
+
+        //viewModel.getNews();
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
