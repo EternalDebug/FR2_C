@@ -6,14 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.example.example.Articles
 import com.example.fr_2c.databinding.FragmentSecondBinding
-
+import com.example.fr_2c.databinding.FragmentThirdBinding
 /**
- * A simple [Fragment] subclass as the second destination in the navigation.
+ * A simple [Fragment] subclass.
+ * Use the [ThirdFragment.newInstance] factory method to
+ * create an instance of this fragment.
  */
-class SecondFragment : Fragment() {
-
-    private var _binding: FragmentSecondBinding? = null
+class ThirdFragment : Fragment() {
+    private var _binding: FragmentThirdBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -24,16 +26,7 @@ class SecondFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentSecondBinding.inflate(inflater, container, false)
-        var cn = viewModel.curNews;
-        binding.textAuthor.setText("Автор: ${cn.author}");
-        if (cn.publishedAt == null)
-            cn.publishedAt = "Неизвестно";
-        binding.textPublished.setText("Опубликовано: ${cn.publishedAt}");
-        binding.textTitle.setText("Заголовок: ${cn.title}");
-
-        binding.textSentiment.setText("Сентимент-оценка: ${"WIP"}");
-
+        _binding = FragmentThirdBinding.inflate(inflater, container, false)
         return binding.root
 
     }
@@ -42,7 +35,15 @@ class SecondFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonSecond.setOnClickListener {
-            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
+            findNavController().navigate(R.id.action_thirdFragment_to_FirstFragment)
+        }
+
+        binding.button4.setOnClickListener{
+            val au = binding.textAuthor.text.toString();
+            val pub = binding.textPublished.text.toString();
+            val tit = binding.textTitle.text.toString();
+            viewModel.curNews = Articles(au,tit,pub);
+            findNavController().navigate(R.id.action_thirdFragment_to_SecondFragment);
         }
     }
 

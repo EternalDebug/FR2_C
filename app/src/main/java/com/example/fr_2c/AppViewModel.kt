@@ -10,7 +10,7 @@ import retrofit2.Response
 class AppViewModel (private val repository: RetroRepository) : ViewModel(){
     val newsList = MutableLiveData<List<Articles>>()
     val errorMessage = MutableLiveData<String>()
-
+    var curNews:Articles = Articles("Null", "Null");
 
     fun getNews() {
         val response = repository.GetNews()

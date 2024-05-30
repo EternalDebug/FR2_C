@@ -31,6 +31,9 @@ class FirstFragment : Fragment() {
         //(activity as AppCompatActivity).supportActionBar?.title = "Pull of actual news"
         val recyclerView: RecyclerView = _binding!!.rcView
         binding.apply { recyclerView.layoutManager = LinearLayoutManager(context); recyclerView.adapter = adaptator}
+        binding.button3.setOnClickListener{
+            findNavController().navigate(R.id.action_FirstFragment_to_thirdFragment)
+        }
         return binding.root
 
     }
@@ -39,7 +42,8 @@ class FirstFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonFirst.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            //findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            viewModel.getNews();
         }
     }
 
