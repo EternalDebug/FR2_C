@@ -23,6 +23,7 @@ class Adaptator : RecyclerView.Adapter<Adaptator.TaskHolder>(){
             txt.setOnClickListener {
                 //code_req = task.urlpath!!;
                 viewModel.curNews = adaptator.NewsList[pos];
+
                 txt.findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
             }
 

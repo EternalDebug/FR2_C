@@ -9,6 +9,8 @@ import androidx.navigation.fragment.findNavController
 import com.example.example.Articles
 import com.example.fr_2c.databinding.FragmentSecondBinding
 import com.example.fr_2c.databinding.FragmentThirdBinding
+import okio.Utf8
+
 /**
  * A simple [Fragment] subclass.
  * Use the [ThirdFragment.newInstance] factory method to
@@ -41,7 +43,7 @@ class ThirdFragment : Fragment() {
         binding.button4.setOnClickListener{
             val au = binding.textAuthor.text.toString();
             val pub = binding.textPublished.text.toString();
-            val tit = binding.textTitle.text.toString();
+            val tit = String(binding.textTitle.text.toString().toByteArray(), Charsets.UTF_8);
             viewModel.curNews = Articles(au,tit,pub);
             findNavController().navigate(R.id.action_thirdFragment_to_SecondFragment);
         }
