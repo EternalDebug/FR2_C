@@ -69,9 +69,9 @@ class Adaptator : RecyclerView.Adapter<Adaptator.TaskHolder>(){
     }*/
 
     fun TestInit(){
-        NewsList.add(Articles("Wasya", "Title1 GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"));
-        NewsList.add(Articles("Petya", "Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2"))
-        NewsList.add(Articles("Nastya", "Title3  TestTestTestTest TestTestTestTest TestTestTestTest TestTestTestTest TestTestTestTest TestTestTestTest"))
-        NewsList.add(Articles("Wasya", "Title1 GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"));
+        NewsList.add(Articles("Title1 GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG", "Wasya"));
+        NewsList.add(Articles("Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2", "Petya"))
+        NewsList.add(Articles("Title3  TestTestTestTest TestTestTestTest TestTestTestTest TestTestTestTest TestTestTestTest TestTestTestTest", "Nastya"))
+        NewsList.add(Articles("Title1 GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG", "Wasya"));
     }
 }

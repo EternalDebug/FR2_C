@@ -5,6 +5,6 @@ import retrofit2.Call
 
 class RetroRepository (private val apiService: ExternalApiService) {
 
-    fun GetNews() = apiService.getNews();
+    fun GetNews() = apiService.getNews(apiToken = key);
 
 }

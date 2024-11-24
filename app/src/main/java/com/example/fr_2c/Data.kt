@@ -6,12 +6,17 @@ import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Query
 
-//похоже, я однажды сильно затупил... Но кому нужен мой репозиторий в принципе...?
-const val apiToken: String = "";
+//Теперь здесь нет моего ApiKey! Старый тупо не работает. Ха-ха
 interface ExternalApiService {
-    @GET("top-headlines?country=ru&category=business&apiKey=${apiToken}")
-    fun getNews(): Call<Response>
+
+    @GET("latest")
+    fun getNews(
+        @Query("country") country: String = "ru",
+        @Query("category") category: String = "business",
+        @Query("apikey") apiToken: String
+    ): Call<Response>
 
     companion object {
 
@@ -22,7 +27,7 @@ interface ExternalApiService {
 
             if (retrofitService == null) {
                 val retrofit = Retrofit.Builder()
-                    .baseUrl("https://newsapi.org/v2/")
+                    .baseUrl("https://newsdata.io/api/1/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
                 retrofitService = retrofit.create(ExternalApiService::class.java)

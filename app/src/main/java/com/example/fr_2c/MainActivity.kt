@@ -1,5 +1,7 @@
 package com.example.fr_2c
 
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +17,7 @@ import com.example.fr_2c.databinding.ActivityMainBinding
 var adaptator = Adaptator();
 
 lateinit var viewModel: AppViewModel
+lateinit var key:String
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,6 +27,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        key = getApiKey()!!
+
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -69,5 +75,12 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
+    }
+
+    private fun getApiKey(): String? {
+        val applicationInfo: ApplicationInfo = applicationContext.packageManager
+            .getApplicationInfo(applicationContext.packageName, PackageManager.GET_META_DATA)
+        val bundle = applicationInfo.metaData
+        return bundle?.getString("keyValue") // Получаем строковое значение из метаданных
     }
 }

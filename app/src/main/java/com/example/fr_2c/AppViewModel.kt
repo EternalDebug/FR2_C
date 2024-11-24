@@ -25,6 +25,7 @@ class AppViewModel (private val repository: RetroRepository) : ViewModel(){
         val response = repository.GetNews()
         response.enqueue(object : Callback<com.example.example.Response> {
             override fun onResponse(call: Call<com.example.example.Response>, response: Response<com.example.example.Response>) {
+                Log.d("Response status:", response.body()?.status!!)
                 newsList.postValue(response.body()?.articles!!.toList())
             }
 
