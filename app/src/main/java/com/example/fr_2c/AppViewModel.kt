@@ -1,6 +1,8 @@
 package com.example.fr_2c
 
 import android.util.Log
+import android.view.View
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.example.Articles
@@ -18,14 +20,19 @@ import java.lang.Exception
 class AppViewModel (private val repository: RetroRepository) : ViewModel(){
     val newsList = MutableLiveData<List<Articles>>()
     val errorMessage = MutableLiveData<String>()
-    var curNews:Articles = Articles("Null", "Null");
+    var curNews:Articles = Articles(0,"Null", "Null");
     var cnSentiment = MutableLiveData<String>();
+    var state: String = "db"
+
+    var newsDB = mutableListOf<Articles>()
+    var newsAPI = mutableListOf<Articles>()
 
     fun getNews() {
         val response = repository.GetNews()
         response.enqueue(object : Callback<com.example.example.Response> {
             override fun onResponse(call: Call<com.example.example.Response>, response: Response<com.example.example.Response>) {
                 Log.d("Response status:", response.body()?.status!!)
+                state = "api"
                 newsList.postValue(response.body()?.articles!!.toList())
             }
 

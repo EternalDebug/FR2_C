@@ -12,12 +12,15 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.example.fr_2c.DAO.DBViewModel
 import com.example.fr_2c.databinding.ActivityMainBinding
 
 var adaptator = Adaptator();
 
 lateinit var viewModel: AppViewModel
 lateinit var key:String
+lateinit var dbViewModel: DBViewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         key = getApiKey()!!
-
+        dbViewModel = ViewModelProvider(this)[DBViewModel::class.java]
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -42,11 +45,18 @@ class MainActivity : AppCompatActivity() {
 
         adaptator.TestInit();
         viewModel.newsList.observe(this, Observer {
-            adaptator.updateNewsList(it);
+            viewModel.newsAPI = it.toMutableList()
+            if (viewModel.state == "api")
+                adaptator.updateNewsList(it);
         })
-        //adaptator.notifyDataSetChanged();
 
-        //viewModel.getNews();
+
+        dbViewModel.articles.observe(this, Observer { ndb ->
+            viewModel.newsDB = ndb.toMutableList()
+            if (viewModel.state == "db"){
+                adaptator.updateNewsList(ndb)
+            }
+        })
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)

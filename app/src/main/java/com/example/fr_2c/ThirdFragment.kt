@@ -44,7 +44,7 @@ class ThirdFragment : Fragment() {
             val au = binding.textAuthor.text.toString();
             val pub = binding.textPublished.text.toString();
             val tit = String(binding.textTitle.text.toString().toByteArray(), Charsets.UTF_8);
-            viewModel.curNews = Articles(tit,au,pub);
+            viewModel.curNews = Articles(0,tit,au,pub);
             findNavController().navigate(R.id.action_thirdFragment_to_SecondFragment);
         }
     }

@@ -34,6 +34,24 @@ class FirstFragment : Fragment() {
         binding.button3.setOnClickListener{
             findNavController().navigate(R.id.action_FirstFragment_to_thirdFragment)
         }
+
+        binding.buttonAPI.setOnClickListener {
+            adaptator.updateNewsList(viewModel.newsAPI)
+            viewModel.state = "api"
+        }
+
+        binding.buttonDB.setOnClickListener {
+            viewModel.newsAPI = adaptator.NewsList
+            adaptator.updateNewsList(viewModel.newsDB)
+            viewModel.state = "db"
+        }
+
+        binding.button2.setOnClickListener {
+            if (viewModel.state == "api")
+                for (elem in adaptator.NewsList){
+                    dbViewModel.insert(elem)
+                }
+        }
         return binding.root
 
     }

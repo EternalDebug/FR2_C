@@ -56,6 +56,9 @@ class Adaptator : RecyclerView.Adapter<Adaptator.TaskHolder>(){
     }
 
     fun removeNews(pos: Int){
+        if (viewModel.state == "db"){
+            dbViewModel.delete(NewsList[pos])
+        }
         this.NewsList.removeAt(pos);
         notifyDataSetChanged();
     }
@@ -69,9 +72,9 @@ class Adaptator : RecyclerView.Adapter<Adaptator.TaskHolder>(){
     }*/
 
     fun TestInit(){
-        NewsList.add(Articles("Title1 GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG", "Wasya"));
-        NewsList.add(Articles("Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2", "Petya"))
-        NewsList.add(Articles("Title3  TestTestTestTest TestTestTestTest TestTestTestTest TestTestTestTest TestTestTestTest TestTestTestTest", "Nastya"))
-        NewsList.add(Articles("Title1 GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG", "Wasya"));
+        NewsList.add(Articles(0,"Title1 GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG", "Wasya"));
+        NewsList.add(Articles(0,"Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2", "Petya"))
+        NewsList.add(Articles(0,"Title3  TestTestTestTest TestTestTestTest TestTestTestTest TestTestTestTest TestTestTestTest TestTestTestTest", "Nastya"))
+        NewsList.add(Articles(0,"Title1 GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG", "Wasya"));
     }
 }
