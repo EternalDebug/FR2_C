@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,15 +36,28 @@ class FirstFragment : Fragment() {
             findNavController().navigate(R.id.action_FirstFragment_to_thirdFragment)
         }
 
-        binding.buttonAPI.setOnClickListener {
-            adaptator.updateNewsList(viewModel.newsAPI)
-            viewModel.state = "api"
-        }
+        binding.switch1.text = "   DB"
+        binding.button2.visibility = View.INVISIBLE
 
-        binding.buttonDB.setOnClickListener {
-            viewModel.newsAPI = adaptator.NewsList
-            adaptator.updateNewsList(viewModel.newsDB)
-            viewModel.state = "db"
+        binding.switch1.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked){
+                adaptator.updateNewsList(viewModel.newsAPI)
+                viewModel.state = "api"
+                binding.switch1.text = "  API"
+                binding.button2.visibility = View.VISIBLE
+                if (viewModel.newsAPI.size == 0){
+                    viewModel.getNews();
+                    //Toast.makeText(this.context, "", Toast.LENGTH_SHORT).show()
+                }
+            }
+            else
+            {
+                viewModel.newsAPI = adaptator.NewsList
+                adaptator.updateNewsList(viewModel.newsDB)
+                viewModel.state = "db"
+                binding.switch1.text = "DB"
+                binding.button2.visibility = View.INVISIBLE
+            }
         }
 
         binding.button2.setOnClickListener {
