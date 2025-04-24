@@ -49,7 +49,8 @@ class FirstFragment : Fragment() {
         binding.button2.setOnClickListener {
             if (viewModel.state == "api")
                 for (elem in adaptator.NewsList){
-                    dbViewModel.insert(elem)
+                    if (elem !in viewModel.newsDB)
+                        dbViewModel.insert(elem)
                 }
         }
         return binding.root

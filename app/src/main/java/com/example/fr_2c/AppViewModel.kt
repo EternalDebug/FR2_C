@@ -48,7 +48,8 @@ class AppViewModel (private val repository: RetroRepository) : ViewModel(){
         try {
             val client = HttpClient()
             GlobalScope.launch(Dispatchers.IO) {
-                val data = client.get<String>("http://10.0.2.2:8000/str/" + java.net.URLEncoder.encode(curNews.title, "utf-8"))
+                val title = curNews.title?.replace("//","")
+                val data = client.get<String>("http://10.0.2.2:8000/str/" + java.net.URLEncoder.encode(title, "utf-8"))
                 Log.i("Simple case ", curNews.title!!)
                 cnSentiment.postValue(data);
             }
