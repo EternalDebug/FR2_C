@@ -34,6 +34,8 @@ class MainActivity : AppCompatActivity() {
         key = getApiKey()!!
         dbViewModel = ViewModelProvider(this)[DBViewModel::class.java]
 
+        viewModel = AppViewModel(RetroRepository(retrofitService));
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         //binding.toolbar.title = "Actual News:";
@@ -41,7 +43,6 @@ class MainActivity : AppCompatActivity() {
         binding.toolbar.subtitle = "Actual News:";
         //binding.toolbar.setTitle("Actual News:") //.title = "Actual News:";
 
-        viewModel = AppViewModel(RetroRepository(retrofitService));
 
         adaptator.TestInit();
         viewModel.newsList.observe(this, Observer {

@@ -36,8 +36,15 @@ class FirstFragment : Fragment() {
             findNavController().navigate(R.id.action_FirstFragment_to_thirdFragment)
         }
 
-        binding.switch1.text = "   DB"
-        binding.button2.visibility = View.INVISIBLE
+        if (viewModel.state == "api"){
+            binding.switch1.text = "  API"
+            binding.switch1.isChecked = true
+            binding.button2.visibility = View.VISIBLE
+        } else{
+            binding.switch1.text = "   DB"
+            binding.switch1.isChecked = false
+            binding.button2.visibility = View.INVISIBLE
+        }
 
         binding.switch1.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked){
@@ -61,7 +68,7 @@ class FirstFragment : Fragment() {
                 viewModel.newsAPI = adaptator.NewsList
                 adaptator.updateNewsList(viewModel.newsDB)
                 viewModel.state = "db"
-                binding.switch1.text = "DB"
+                binding.switch1.text = "  DB"
                 binding.button2.visibility = View.INVISIBLE
             }
         }
