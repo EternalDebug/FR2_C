@@ -1,7 +1,9 @@
 package com.example.fr_2c
 
+import android.app.Activity
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -26,6 +28,7 @@ class AppViewModel (private val repository: RetroRepository) : ViewModel(){
 
     var newsDB = mutableListOf<Articles>()
     var newsAPI = mutableListOf<Articles>()
+    var isGNFailure = MutableLiveData<Boolean>();
 
     fun getNews() {
         val response = repository.GetNews()
@@ -33,10 +36,12 @@ class AppViewModel (private val repository: RetroRepository) : ViewModel(){
             override fun onResponse(call: Call<com.example.example.Response>, response: Response<com.example.example.Response>) {
                 Log.d("Response status:", response.body()?.status!!)
                 state = "api"
+                isGNFailure.postValue(false)
                 newsList.postValue(response.body()?.articles!!.toList())
             }
 
             override fun onFailure(call: Call<com.example.example.Response>, t: Throwable) {
+                isGNFailure.postValue(true)
                 errorMessage.postValue(t.message)
             }
         })

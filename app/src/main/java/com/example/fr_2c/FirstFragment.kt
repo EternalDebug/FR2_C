@@ -47,7 +47,13 @@ class FirstFragment : Fragment() {
                 binding.button2.visibility = View.VISIBLE
                 if (viewModel.newsAPI.size == 0){
                     viewModel.getNews();
-                    //Toast.makeText(this.context, "", Toast.LENGTH_SHORT).show()
+                    viewModel.isGNFailure.observe(viewLifecycleOwner) {
+                        if (it)
+                            MakeToast("Нет доступа к интернету!")
+                        else
+                            MakeToast("Пул новостей обновлен")
+                    }
+
                 }
             }
             else
@@ -83,5 +89,9 @@ class FirstFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    public fun MakeToast(string: String){
+        Toast.makeText(this.context, string, Toast.LENGTH_SHORT).show()
     }
 }
