@@ -52,8 +52,12 @@ class SecondFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonSecond.setOnClickListener {
+        binding.buttonBack.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
+        }
+
+        binding.buttonMore.setOnClickListener {
+            findNavController().navigate(R.id.action_SecondFragment_to_moreInfoFrag)
         }
     }
 

@@ -12,12 +12,13 @@
         android:padding="16dp">
 
         <Button
-            android:id="@+id/button_second"
+            android:id="@+id/button_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="48dp"
             android:text="Обратно"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.189"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textSentiment" />
 
@@ -94,6 +95,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textTitle" />
+
+        <Button
+            android:id="@+id/buttonMore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="50dp"
+            android:text="Детальнее"
+            app:layout_constraintStart_toEndOf="@+id/button_back"
+            app:layout_constraintTop_toBottomOf="@+id/textSentiment" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
