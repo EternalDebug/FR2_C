@@ -1,7 +1,7 @@
 package com.example.fr_2c.DAO
 
 import androidx.lifecycle.LiveData
-import com.example.example.Articles
+import com.example.fr_2c.DataClasses.Articles
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

@@ -6,10 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.example.example.Articles
-import com.example.fr_2c.databinding.FragmentSecondBinding
+import com.example.fr_2c.DataClasses.Articles
 import com.example.fr_2c.databinding.FragmentThirdBinding
-import okio.Utf8
 
 /**
  * A simple [Fragment] subclass.

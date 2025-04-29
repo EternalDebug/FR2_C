@@ -1,13 +1,9 @@
 package com.example.fr_2c
 
-import android.app.Activity
 import android.util.Log
-import android.view.View
-import android.widget.Toast
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.example.Articles
+import com.example.fr_2c.DataClasses.Articles
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -22,7 +18,7 @@ import java.lang.Exception
 class AppViewModel (private val repository: RetroRepository) : ViewModel(){
     val newsList = MutableLiveData<List<Articles>>()
     val errorMessage = MutableLiveData<String>()
-    var curNews:Articles = Articles(0,"Null", "Null");
+    var curNews: Articles = Articles(0,"Null", "Null");
     var cnSentiment = MutableLiveData<String>();
     var state: String = "db"
 
@@ -32,15 +28,15 @@ class AppViewModel (private val repository: RetroRepository) : ViewModel(){
 
     fun getNews() {
         val response = repository.GetNews()
-        response.enqueue(object : Callback<com.example.example.Response> {
-            override fun onResponse(call: Call<com.example.example.Response>, response: Response<com.example.example.Response>) {
+        response.enqueue(object : Callback<com.example.fr_2c.DataClasses.Response> {
+            override fun onResponse(call: Call<com.example.fr_2c.DataClasses.Response>, response: Response<com.example.fr_2c.DataClasses.Response>) {
                 Log.d("Response status:", response.body()?.status!!)
                 state = "api"
                 isGNFailure.postValue(false)
                 newsList.postValue(response.body()?.articles!!.toList())
             }
 
-            override fun onFailure(call: Call<com.example.example.Response>, t: Throwable) {
+            override fun onFailure(call: Call<com.example.fr_2c.DataClasses.Response>, t: Throwable) {
                 isGNFailure.postValue(true)
                 errorMessage.postValue(t.message)
             }
@@ -57,7 +53,7 @@ class AppViewModel (private val repository: RetroRepository) : ViewModel(){
                 if (title != null) {
                     title = title.replace("/"," ")
                 }
-                val data = client.get<String>("http://10.0.2.2:8000/str/" + java.net.URLEncoder.encode(title, "utf-8"))
+                val data = client.get<String>(innerAPIURL + java.net.URLEncoder.encode(title, "utf-8"))
                 Log.i("Simple case ", curNews.title!!)
                 cnSentiment.postValue(data);
             }

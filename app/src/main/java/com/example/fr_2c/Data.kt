@@ -1,7 +1,6 @@
 package com.example.fr_2c
 
-import com.example.example.Articles
-import com.example.example.Response
+import com.example.fr_2c.DataClasses.Response
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

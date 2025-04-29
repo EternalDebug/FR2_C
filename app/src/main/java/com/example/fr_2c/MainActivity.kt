@@ -11,6 +11,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.fr_2c.DAO.DBViewModel
@@ -20,6 +21,7 @@ var adaptator = Adaptator();
 
 lateinit var viewModel: AppViewModel
 lateinit var key:String
+lateinit var innerAPIURL:String
 lateinit var dbViewModel: DBViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -30,8 +32,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //Получаем мета-данные по ключу. Ключ от постороннего АПИ и урл самописного
+        key = getMetaByKey("keyValue")!!
+        innerAPIURL = getMetaByKey("myApi")!!
 
-        key = getApiKey()!!
         dbViewModel = ViewModelProvider(this)[DBViewModel::class.java]
 
         viewModel = AppViewModel(RetroRepository(retrofitService));
@@ -88,10 +92,10 @@ class MainActivity : AppCompatActivity() {
                 || super.onSupportNavigateUp()
     }
 
-    private fun getApiKey(): String? {
+    private fun getMetaByKey(Key:String): String? {
         val applicationInfo: ApplicationInfo = applicationContext.packageManager
             .getApplicationInfo(applicationContext.packageName, PackageManager.GET_META_DATA)
         val bundle = applicationInfo.metaData
-        return bundle?.getString("keyValue") // Получаем строковое значение из метаданных
+        return bundle?.getString(Key) // Получаем строковое значение из метаданных
     }
 }

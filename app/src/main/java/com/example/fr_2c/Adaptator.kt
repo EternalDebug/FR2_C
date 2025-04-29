@@ -3,10 +3,9 @@ package com.example.fr_2c
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.example.example.Articles
+import com.example.fr_2c.DataClasses.Articles
 import com.example.fr_2c.databinding.NewsOneBinding
 
 class Adaptator : RecyclerView.Adapter<Adaptator.TaskHolder>(){

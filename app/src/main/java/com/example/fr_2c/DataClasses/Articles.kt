@@ -1,4 +1,4 @@
-package com.example.example
+package com.example.fr_2c.DataClasses
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

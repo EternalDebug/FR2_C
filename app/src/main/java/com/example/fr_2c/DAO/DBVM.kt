@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import com.example.example.Articles
+import com.example.fr_2c.DataClasses.Articles
 import kotlinx.coroutines.launch
 
 class DBViewModel(application: Application): AndroidViewModel(application) {

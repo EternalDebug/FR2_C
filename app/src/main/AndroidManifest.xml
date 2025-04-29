@@ -29,6 +29,9 @@
         <meta-data
             android:name = "keyValue"
             android:value = "${KEY}"/>
+        <meta-data
+            android:name = "myApi"
+            android:value = "${MYAPI}"/>
     </application>
 
 </manifest>
