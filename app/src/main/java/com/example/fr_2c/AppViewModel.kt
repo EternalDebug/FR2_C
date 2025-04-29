@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.fr_2c.DataClasses.Articles
+import com.example.fr_2c.DataClasses.InnerAPIResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -19,12 +20,13 @@ class AppViewModel (private val repository: RetroRepository) : ViewModel(){
     val newsList = MutableLiveData<List<Articles>>()
     val errorMessage = MutableLiveData<String>()
     var curNews: Articles = Articles(0,"Null", "Null");
-    var cnSentiment = MutableLiveData<String>();
     var state: String = "db"
 
     var newsDB = mutableListOf<Articles>()
     var newsAPI = mutableListOf<Articles>()
     var isGNFailure = MutableLiveData<Boolean>();
+
+    var Answer = MutableLiveData<InnerAPIResponse>();
 
     fun getNews() {
         val response = repository.GetNews()
@@ -43,24 +45,29 @@ class AppViewModel (private val repository: RetroRepository) : ViewModel(){
         })
     }
 
-    //Primitive code
-    @OptIn(DelicateCoroutinesApi::class)
-    fun GetSentiment(){
-        try {
-            val client = HttpClient()
-            GlobalScope.launch(Dispatchers.IO) {
-                var title = curNews.title?.replace("//"," ")
-                if (title != null) {
-                    title = title.replace("/"," ")
-                }
-                val data = client.get<String>(innerAPIURL + java.net.URLEncoder.encode(title, "utf-8"))
-                Log.i("Simple case ", curNews.title!!)
-                cnSentiment.postValue(data);
+    //Actual code
+    fun getAnswer() {
+
+        var title = curNews.title?.replace("//"," ")
+        if (title != null) {
+            title = title.replace("/"," ")
+            title = title.replace("?"," ")
+        }
+
+        val response = repository.GetAnswer(title!!)
+        response.enqueue(object : Callback<com.example.fr_2c.DataClasses.InnerAPIResponse> {
+            override fun onResponse(call: Call<com.example.fr_2c.DataClasses.InnerAPIResponse>, response: Response<com.example.fr_2c.DataClasses.InnerAPIResponse>) {
+                Log.d("Inner response status:", response.body()?.status!!)
+                Answer.postValue(response.body())
+                //state = "api"
+                //isGNFailure.postValue(false)
+                //newsList.postValue(response.body()?.articles!!.toList())
             }
-        }
-        catch (e: Exception) {
-            print(e)
-            //cnSentiment = e.toString();
-        }
+
+            override fun onFailure(call: Call<com.example.fr_2c.DataClasses.InnerAPIResponse>, t: Throwable) {
+                //isGNFailure.postValue(true)
+                errorMessage.postValue(t.message)
+            }
+        })
     }
 }

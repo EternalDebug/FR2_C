@@ -39,12 +39,10 @@ class SecondFragment : Fragment() {
         binding.textPublished.setText("Опубликовано: ${cn.publishedAt}");
         binding.textTitle.setText("Заголовок: ${cn.title}");
 
-        viewModel.GetSentiment();
-        //viewModel.cnSentiment
+        viewModel.getAnswer()
 
-        //binding.textSentiment.setText("Сентимент-оценка: ${viewModel.cnSentiment}");
-        viewModel.cnSentiment.observe(viewLifecycleOwner, Observer {
-            binding.textSentiment.setText("Сентимент-оценка: ${it}");
+        viewModel.Answer.observe(viewLifecycleOwner, Observer {
+            binding.textSentiment.setText("${it.status}, Сентимент-оценка: ${it.resSent}, Процент: ${it.resPercent}");
         })
 
         return binding.root
@@ -53,7 +51,6 @@ class SecondFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //binding.textSentiment.setText("Сентимент-оценка: ${viewModel.cnSentiment}");
 
         binding.buttonSecond.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)

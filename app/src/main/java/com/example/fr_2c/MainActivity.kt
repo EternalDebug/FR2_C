@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private val retrofitService = ExternalApiService.getInstance()
+    private lateinit var innerApiRetrofitService: InternalApiService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,9 +37,11 @@ class MainActivity : AppCompatActivity() {
         key = getMetaByKey("keyValue")!!
         innerAPIURL = getMetaByKey("myApi")!!
 
+        innerApiRetrofitService = InternalApiService.getInstance()
+
         dbViewModel = ViewModelProvider(this)[DBViewModel::class.java]
 
-        viewModel = AppViewModel(RetroRepository(retrofitService));
+        viewModel = AppViewModel(RetroRepository(retrofitService, innerApiRetrofitService));
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
