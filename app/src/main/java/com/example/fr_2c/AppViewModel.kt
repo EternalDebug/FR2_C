@@ -5,12 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.fr_2c.DataClasses.Articles
 import com.example.fr_2c.DataClasses.InnerAPIResponse
-import io.ktor.client.HttpClient
-import io.ktor.client.request.get
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,6 +21,7 @@ class AppViewModel (private val repository: RetroRepository) : ViewModel(){
     var isGNFailure = MutableLiveData<Boolean>();
 
     var Answer = MutableLiveData<InnerAPIResponse>();
+    var curAnswer = InnerAPIResponse()
 
     fun getNews() {
         val response = repository.GetNews()
@@ -48,13 +43,12 @@ class AppViewModel (private val repository: RetroRepository) : ViewModel(){
     //Actual code
     fun getAnswer() {
 
-        var title = curNews.title?.replace("//"," ")
-        if (title != null) {
-            title = title.replace("/"," ")
-            title = title.replace("?"," ")
-        }
+        var title = killSpecSymbols(curNews.title)
+        var desc = killSpecSymbols(curNews.description)
+        if (desc != "непонятка")
+            title = "$title $desc" //учет тела новости, если оно есть
 
-        val response = repository.GetAnswer(title!!)
+        val response = repository.GetAnswer(title)
         response.enqueue(object : Callback<com.example.fr_2c.DataClasses.InnerAPIResponse> {
             override fun onResponse(call: Call<com.example.fr_2c.DataClasses.InnerAPIResponse>, response: Response<com.example.fr_2c.DataClasses.InnerAPIResponse>) {
                 Log.d("Inner response status:", response.body()?.status!!)
@@ -69,5 +63,28 @@ class AppViewModel (private val repository: RetroRepository) : ViewModel(){
                 errorMessage.postValue(t.message)
             }
         })
+    }
+
+    fun killSpecSymbols(txt: String?) : String
+    {
+        var res = "непонятка"
+        if (txt != null){
+            if (txt != ""){
+                txt.replace("//", " ")
+                txt.replace("/", " ")
+                txt.replace("?", " ")
+                txt.replace(":", " ")
+                txt.replace(";", " ")
+                txt.replace("@", " ")
+                txt.replace("&", " ")
+                txt.replace("=", " ")
+                txt.replace("+", " ")
+                txt.replace("$", " ")
+                txt.replace(",", " ")
+                txt.replace("#", " ")
+                res = txt
+            }
+        }
+        return res
     }
 }

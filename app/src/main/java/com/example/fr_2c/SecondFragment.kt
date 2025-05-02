@@ -33,16 +33,16 @@ class SecondFragment : Fragment() {
 
         _binding = FragmentSecondBinding.inflate(inflater, container, false)
         var cn = viewModel.curNews;
-        binding.textAuthor.setText("Автор: ${cn.author}");
+        binding.textAuthor.text = cn.author;
         if (cn.publishedAt == null)
             cn.publishedAt = "Неизвестно";
-        binding.textPublished.setText("Опубликовано: ${cn.publishedAt}");
-        binding.textTitle.setText("Заголовок: ${cn.title}");
+        binding.textPublished.text = cn.publishedAt
+        binding.textTitle.text = cn.title
 
-        viewModel.getAnswer()
+        //viewModel.getAnswer()
 
         viewModel.Answer.observe(viewLifecycleOwner, Observer {
-            binding.textSentiment.setText("${it.status}, Сентимент-оценка: ${it.resSent}, Процент: ${it.resPercent}");
+            binding.textSentiment.text = "${it.status}, Сентимент-оценка: ${it.resSent}, Процент: ${it.resPercent}";
         })
 
         return binding.root

@@ -50,8 +50,6 @@ class MainActivity : AppCompatActivity() {
         binding.toolbar.subtitle = "Actual News:";
         //binding.toolbar.setTitle("Actual News:") //.title = "Actual News:";
 
-
-        adaptator.TestInit();
         viewModel.newsList.observe(this, Observer {
             viewModel.newsAPI = it.toMutableList()
             if (viewModel.state == "api")

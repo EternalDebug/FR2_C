@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fr_2c.databinding.FragmentFirstBinding
+import com.google.android.material.tabs.TabLayout
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -18,78 +19,112 @@ import com.example.fr_2c.databinding.FragmentFirstBinding
 class FirstFragment : Fragment() {
 
     private var _binding: FragmentFirstBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
-        //(activity as AppCompatActivity).supportActionBar?.title = "Pull of actual news"
-        val recyclerView: RecyclerView = _binding!!.rcView
-        binding.apply { recyclerView.layoutManager = LinearLayoutManager(context); recyclerView.adapter = adaptator}
-        binding.button3.setOnClickListener{
+
+        val recyclerView: RecyclerView = binding.rcView
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = adaptator
+
+        binding.button3.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_thirdFragment)
         }
 
-        if (viewModel.state == "api"){
-            binding.switch1.text = "  API"
-            binding.switch1.isChecked = true
-            binding.button2.visibility = View.VISIBLE
-        } else{
-            binding.switch1.text = "   DB"
-            binding.switch1.isChecked = false
-            binding.button2.visibility = View.INVISIBLE
-        }
+        // Устанавливаем начальное состояние
+        setupInitialTabSelection()
 
-        binding.switch1.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked){
-                adaptator.updateNewsList(viewModel.newsAPI)
-                viewModel.state = "api"
-                binding.switch1.text = "  API"
-                binding.button2.visibility = View.VISIBLE
-                if (viewModel.newsAPI.size == 0){
-                    viewModel.getNews();
-                    viewModel.isGNFailure.observe(viewLifecycleOwner) {
-                        if (it)
-                            MakeToast("Нет доступа к интернету!")
-                        else
-                            MakeToast("Пул новостей обновлен")
-                    }
-
-                }
-            }
-            else
-            {
-                viewModel.newsAPI = adaptator.NewsList
-                adaptator.updateNewsList(viewModel.newsDB)
-                viewModel.state = "db"
-                binding.switch1.text = "  DB"
-                binding.button2.visibility = View.INVISIBLE
-            }
-        }
+        // Добавление слушателя для выбора табов
+        setupTabSelectionListener()
 
         binding.button2.setOnClickListener {
-            if (viewModel.state == "api")
-                for (elem in adaptator.NewsList){
-                    if (elem !in viewModel.newsDB)
-                        dbViewModel.insert(elem)
-                }
+            saveNewsIfApi()
         }
-        return binding.root
-
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         binding.buttonFirst.setOnClickListener {
-            //findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-            viewModel.getNews();
+            if (viewModel.state == "api")
+            {
+                viewModel.getNews()
+            }
+
+        }
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            if (viewModel.state == "api"){
+                viewModel.getNews()
+            }
+            binding.swipeRefreshLayout.isRefreshing = false
+        }
+
+        return binding.root
+    }
+
+    private fun setupInitialTabSelection() {
+        if (viewModel.state == "api") {
+            binding.sourceTabLayout.getTabAt(0)?.select()
+            binding.button2.visibility = View.VISIBLE
+            binding.buttonFirst.visibility = View.VISIBLE
+        } else {
+            binding.sourceTabLayout.getTabAt(1)?.select()
+            binding.button2.visibility = View.INVISIBLE
+            binding.buttonFirst.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun setupTabSelectionListener() {
+        binding.sourceTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                when (tab.position) {
+                    0 -> switchToApi()
+                    1 -> switchToSavedNews()
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {}
+            override fun onTabReselected(tab: TabLayout.Tab) {}
+        })
+    }
+
+    private fun switchToApi(flag: Boolean = false) {
+        adaptator.updateNewsList(viewModel.newsAPI)
+        viewModel.state = "api"
+        binding.button2.visibility = View.VISIBLE
+        binding.buttonFirst.visibility = View.VISIBLE
+        if (viewModel.newsAPI.isEmpty() or flag) {
+            viewModel.getNews()
+            observeNewsFetchResult()
+        }
+    }
+
+    private fun switchToSavedNews() {
+        viewModel.newsAPI = adaptator.NewsList
+        adaptator.updateNewsList(viewModel.newsDB)
+        viewModel.state = "db"
+        binding.button2.visibility = View.INVISIBLE
+        binding.buttonFirst.visibility = View.INVISIBLE
+    }
+
+    private fun observeNewsFetchResult() {
+        viewModel.isGNFailure.observe(viewLifecycleOwner) { isFailure ->
+            if (isFailure) {
+                MakeToast("Нет доступа к интернету!")
+            } else {
+                MakeToast("Пул новостей обновлен")
+            }
+        }
+    }
+
+    private fun saveNewsIfApi() {
+        // Сохранить новости из текущего списка, если в API
+        if (viewModel.state == "api") {
+            for (elem in adaptator.NewsList) {
+                if (elem !in viewModel.newsDB)
+                    dbViewModel.insert(elem)
+            }
         }
     }
 
@@ -98,7 +133,7 @@ class FirstFragment : Fragment() {
         _binding = null
     }
 
-    public fun MakeToast(string: String){
-        Toast.makeText(this.context, string, Toast.LENGTH_SHORT).show()
+    private fun MakeToast(message: String) {
+        Toast.makeText(this.context, message, Toast.LENGTH_SHORT).show()
     }
 }

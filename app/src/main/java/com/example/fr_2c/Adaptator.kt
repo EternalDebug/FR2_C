@@ -4,9 +4,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fr_2c.DataClasses.Articles
 import com.example.fr_2c.databinding.NewsOneBinding
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class Adaptator : RecyclerView.Adapter<Adaptator.TaskHolder>(){
 
@@ -15,15 +19,30 @@ class Adaptator : RecyclerView.Adapter<Adaptator.TaskHolder>(){
     class TaskHolder(item: View) : RecyclerView.ViewHolder(item) {
         val binding = NewsOneBinding.bind(item)
         fun bind(task: Articles, pos: Int) = with(binding) {
-            binding.textView.setText(task.author);
-            binding.textView2.setText(task.title);
+            binding.textView.text = task.author ?: "Unknown Source";
+            binding.textView2.text = task.title;
 
-            val txt = binding.textView2//itemView.findViewById<TextView>(R.id.textView_CA)
-            txt.setOnClickListener {
-                //code_req = task.urlpath!!;
-                viewModel.curNews = adaptator.NewsList[pos];
+            // Show publication date if available
+            task.publishedAt?.let { pubDate ->
+                if (binding.publishedDate != null) { // Check if the TextView exists in layout
+                    try {
+                        // Format date if possible
+                        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
+                        val outputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.US)
+                        val date = inputFormat.parse(pubDate)
+                        binding.publishedDate.text = date?.let { outputFormat.format(it) } ?: pubDate
+                    } catch (e: Exception) {
+                        // If date parsing fails, show as is
+                        binding.publishedDate.text = pubDate
+                    }
+                }
+            }
 
-                txt.findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            // Set card click listener to view article details
+            binding.root.setOnClickListener {
+                viewModel.curNews = task
+                viewModel.getAnswer()
+                it.findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
             }
 
             binding.button.setOnClickListener{
@@ -62,18 +81,4 @@ class Adaptator : RecyclerView.Adapter<Adaptator.TaskHolder>(){
         notifyDataSetChanged();
     }
 
-    /*fun TestInit(){
-        NewsList.add(Data("Title1"));
-        NewsList.add(Data("Title2"));
-        NewsList.add(Data("Title3"));
-        NewsList.add(Data("Title4"));
-        NewsList.add(Data("Title5"));
-    }*/
-
-    fun TestInit(){
-        NewsList.add(Articles(0,"Title1 GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG", "Wasya"));
-        NewsList.add(Articles(0,"Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2 Title2", "Petya"))
-        NewsList.add(Articles(0,"Title3  TestTestTestTest TestTestTestTest TestTestTestTest TestTestTestTest TestTestTestTest TestTestTestTest", "Nastya"))
-        NewsList.add(Articles(0,"Title1 GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG", "Wasya"));
-    }
 }
