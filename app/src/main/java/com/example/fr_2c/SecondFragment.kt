@@ -38,7 +38,7 @@ class SecondFragment : Fragment() {
             cn.publishedAt = "Неизвестно";
         binding.textPublished.text = cn.publishedAt
         binding.textTitle.text = cn.title
-
+        binding.textDesc.text = cn.description
         //viewModel.getAnswer()
 
         viewModel.Answer.observe(viewLifecycleOwner, Observer {

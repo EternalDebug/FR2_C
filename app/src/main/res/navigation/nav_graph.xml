@@ -46,8 +46,8 @@
     <fragment
         android:id="@+id/moreInfoFrag"
         android:name="com.example.fr_2c.MoreInfoFrag"
-        android:label="fragment_more_info"
-        tools:layout="@layout/fragment_more_info" >
+        android:label="Прогнозы всех моделей:"
+        tools:layout="@layout/fragment_more_info">
         <action
             android:id="@+id/action_moreInfoFrag_to_SecondFragment"
             app:destination="@id/SecondFragment" />
