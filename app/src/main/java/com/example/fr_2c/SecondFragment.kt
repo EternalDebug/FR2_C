@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.example.fr_2c.DataClasses.InnerAPIResponse
 import com.example.fr_2c.databinding.FragmentSecondBinding
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
@@ -31,9 +32,16 @@ class SecondFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         _binding = FragmentSecondBinding.inflate(inflater, container, false)
-        resetFields()
+        //resetFields()
+
+        viewModel.Answer.observe(viewLifecycleOwner, Observer {
+            //binding.textSentiment.text = "${it.status}, Сентимент-оценка: ${it.resSent}, Процент: ${it.resPercent}";
+            viewModel.curAnswer = it
+            PutAnswer()
+        })
+        //Страшный костыль, обеспечивающий сброс интерфейса
+        viewModel.Answer.postValue(InnerAPIResponse())
 
 
         return binding.root
@@ -42,12 +50,6 @@ class SecondFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewModel.Answer.observe(viewLifecycleOwner, Observer {
-            //binding.textSentiment.text = "${it.status}, Сентимент-оценка: ${it.resSent}, Процент: ${it.resPercent}";
-            viewModel.curAnswer = it
-            PutAnswer()
-        })
 
         binding.buttonBack.setOnClickListener {
             resetFields()
@@ -65,6 +67,7 @@ class SecondFragment : Fragment() {
     }
 
     private fun resetFields() {
+
         val cn = viewModel.curNews
         binding.textAuthor.text = cn.author
         if (cn.publishedAt == null) {
@@ -84,18 +87,22 @@ class SecondFragment : Fragment() {
     }
 
     private fun PutAnswer(){
-        binding.textSentiment.visibility = View.INVISIBLE
-        binding.buttonMore.visibility = View.VISIBLE
-        val it = viewModel.curAnswer
-        binding.sentimentProgress2.progress = (it.resSent!! * 100).toInt()
+        if (viewModel.curAnswer.status == "OK"){
+            binding.textSentiment.visibility = View.INVISIBLE
+            binding.buttonMore.visibility = View.VISIBLE
+            val it = viewModel.curAnswer
+            binding.sentimentProgress2.progress = (it.resSent!! * 100).toInt()
 
-        var s = it.resSent
-        s = if (s != null) (s * 1000).roundToInt() / 1000.0 else 0.5
-        var p = it.resPercent
-        p = if (p != null) (p * 1000).roundToInt() / 1000.0 else 0.0
+            var s = it.resSent
+            s = if (s != null) (s * 1000).roundToInt() / 1000.0 else 0.5
+            var p = it.resPercent
+            p = if (p != null) (p * 1000).roundToInt() / 1000.0 else 0.0
 
-        binding.textSent.text = s.toString()
-        binding.textPerc.text = "${p}%"
-        binding.textComment.text = if (it.comment != null) it.comment else "Null comment"
+            binding.textSent.text = s.toString()
+            binding.textPerc.text = "${p}%"
+            binding.textComment.text = if (it.comment != null) it.comment else "Null comment"
+        }
+        else resetFields()
+
     }
 }
