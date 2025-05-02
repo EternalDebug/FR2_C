@@ -33,40 +33,7 @@ class SecondFragment : Fragment() {
     ): View? {
 
         _binding = FragmentSecondBinding.inflate(inflater, container, false)
-        //выставляем базовую информацию о новости
-        val cn = viewModel.curNews;
-        binding.textAuthor.text = cn.author;
-        if (cn.publishedAt == null)
-            cn.publishedAt = "Неизвестно";
-        binding.textPublished.text = cn.publishedAt
-        binding.textTitle.text = cn.title
-        binding.textDesc.text = cn.description
-        //ставим базовое состояние анализа
-        binding.textSentiment.visibility = View.VISIBLE
-        binding.sentimentProgress2.progress = 50
-        binding.textSent.text = "0.5"
-        binding.textPerc.text = "0%"
-        binding.textComment.text = "No comments..."
-        binding.buttonMore.visibility = View.INVISIBLE
-
-        viewModel.Answer.observe(viewLifecycleOwner, Observer {
-            //binding.textSentiment.text = "${it.status}, Сентимент-оценка: ${it.resSent}, Процент: ${it.resPercent}";
-            viewModel.curAnswer = it
-            binding.textSentiment.visibility = View.INVISIBLE
-            binding.buttonMore.visibility = View.VISIBLE
-
-            binding.sentimentProgress2.progress = (it.resSent!! * 100).toInt()
-
-            var s = it.resSent
-            s = if (s != null) (s * 1000).roundToInt() / 1000.0 else 0.5
-            var p = it.resPercent
-            p = if (p != null) (p * 1000).roundToInt() / 1000.0 else 0.0
-
-            binding.textSent.text = s.toString()
-            binding.textPerc.text = "${p}%"
-            binding.textComment.text = if (it.comment != null) it.comment else "Null comment"
-        })
-
+        resetFields()
 
 
         return binding.root
@@ -76,7 +43,14 @@ class SecondFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.Answer.observe(viewLifecycleOwner, Observer {
+            //binding.textSentiment.text = "${it.status}, Сентимент-оценка: ${it.resSent}, Процент: ${it.resPercent}";
+            viewModel.curAnswer = it
+            PutAnswer()
+        })
+
         binding.buttonBack.setOnClickListener {
+            resetFields()
             findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
         }
 
@@ -88,5 +62,40 @@ class SecondFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun resetFields() {
+        val cn = viewModel.curNews
+        binding.textAuthor.text = cn.author
+        if (cn.publishedAt == null) {
+            cn.publishedAt = "Неизвестно"
+        }
+        binding.textPublished.text = cn.publishedAt
+        binding.textTitle.text = cn.title
+        binding.textDesc.text = cn.description
+
+        // Ставим базовое состояние анализа
+        binding.textSentiment.visibility = View.VISIBLE
+        binding.sentimentProgress2.progress = 50
+        binding.textSent.text = "0.5"
+        binding.textPerc.text = "0%"
+        binding.textComment.text = "No comments..."
+        binding.buttonMore.visibility = View.INVISIBLE
+    }
+
+    private fun PutAnswer(){
+        binding.textSentiment.visibility = View.INVISIBLE
+        binding.buttonMore.visibility = View.VISIBLE
+        val it = viewModel.curAnswer
+        binding.sentimentProgress2.progress = (it.resSent!! * 100).toInt()
+
+        var s = it.resSent
+        s = if (s != null) (s * 1000).roundToInt() / 1000.0 else 0.5
+        var p = it.resPercent
+        p = if (p != null) (p * 1000).roundToInt() / 1000.0 else 0.0
+
+        binding.textSent.text = s.toString()
+        binding.textPerc.text = "${p}%"
+        binding.textComment.text = if (it.comment != null) it.comment else "Null comment"
     }
 }
