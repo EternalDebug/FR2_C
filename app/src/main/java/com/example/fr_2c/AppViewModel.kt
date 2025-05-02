@@ -42,9 +42,11 @@ class AppViewModel (private val repository: RetroRepository) : ViewModel(){
 
     //Actual code
     fun getAnswer() {
-
+        curAnswer = InnerAPIResponse() // обнуляем переменную
         var title = killSpecSymbols(curNews.title)
+        Log.d("TITLE", title)
         var desc = killSpecSymbols(curNews.description)
+        Log.d("DESC", desc)
         if (desc != "непонятка")
             title = "$title $desc" //учет тела новости, если оно есть
 
@@ -53,37 +55,31 @@ class AppViewModel (private val repository: RetroRepository) : ViewModel(){
             override fun onResponse(call: Call<com.example.fr_2c.DataClasses.InnerAPIResponse>, response: Response<com.example.fr_2c.DataClasses.InnerAPIResponse>) {
                 Log.d("Inner response status:", response.body()?.status!!)
                 Answer.postValue(response.body())
-                //state = "api"
-                //isGNFailure.postValue(false)
-                //newsList.postValue(response.body()?.articles!!.toList())
+
             }
 
             override fun onFailure(call: Call<com.example.fr_2c.DataClasses.InnerAPIResponse>, t: Throwable) {
-                //isGNFailure.postValue(true)
                 errorMessage.postValue(t.message)
             }
         })
     }
 
-    fun killSpecSymbols(txt: String?) : String
-    {
+    fun killSpecSymbols(txt: String?): String {
         var res = "непонятка"
-        if (txt != null){
-            if (txt != ""){
-                txt.replace("//", " ")
-                txt.replace("/", " ")
-                txt.replace("?", " ")
-                txt.replace(":", " ")
-                txt.replace(";", " ")
-                txt.replace("@", " ")
-                txt.replace("&", " ")
-                txt.replace("=", " ")
-                txt.replace("+", " ")
-                txt.replace("$", " ")
-                txt.replace(",", " ")
-                txt.replace("#", " ")
-                res = txt
-            }
+        if (txt != null && txt.isNotEmpty()) {
+            res = txt
+                .replace("//", " ")
+                .replace("/", " ")
+                .replace("?", " ")
+                .replace(":", " ")
+                .replace(";", " ")
+                .replace("@", " ")
+                .replace("&", " ")
+                .replace("=", " ")
+                .replace("+", " ")
+                .replace("$", " ")
+                .replace(",", " ")
+                .replace("#", " ")
         }
         return res
     }

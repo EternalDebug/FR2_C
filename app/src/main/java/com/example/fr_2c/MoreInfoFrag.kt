@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.fr_2c.databinding.FragmentMoreInfoBinding
 import com.example.fr_2c.databinding.FragmentSecondBinding
+import kotlin.math.roundToInt
 
 /**
  * A simple [Fragment] subclass.
@@ -25,18 +26,32 @@ class MoreInfoFrag : Fragment() {
 
         _binding = FragmentMoreInfoBinding.inflate(inflater, container, false)
 
-        //var cn = viewModel.curNews;
-        //binding.textAuthor.setText("Автор: ${cn.author}");
-        //if (cn.publishedAt == null)
-        //    cn.publishedAt = "Неизвестно";
-        //binding.textPublished.setText("Опубликовано: ${cn.publishedAt}");
-        //binding.textTitle.setText("Заголовок: ${cn.title}");
+        val cn = viewModel.curNews;
 
-        //viewModel.getAnswer()
+        binding.textTitle.text = cn.title
+        var ls = viewModel.curAnswer.linearSent
+        ls = if (ls != null) (ls * 1000).roundToInt() / 1000.0 else 0.5
+        var lp = viewModel.curAnswer.linearPercent
+        lp = if (lp != null) (lp * 1000).roundToInt() / 1000.0 else 0.0
 
-        //viewModel.Answer.observe(viewLifecycleOwner, Observer {
-        //    binding.textSentiment.setText("${it.status}, Сентимент-оценка: ${it.resSent}, Процент: ${it.resPercent}");
-        //})
+        var ns = viewModel.curAnswer.neuroSent
+        ns = if (ns != null) (ns * 1000).roundToInt() / 1000.0 else 0.5
+        var np = viewModel.curAnswer.neuroPercent
+        np = if (np != null) (np * 1000).roundToInt() / 1000.0 else 0.0
+
+        var lls = viewModel.curAnswer.aiSent
+        lls = if (lls != null) (lls * 1000).roundToInt() / 1000.0 else 0.5
+        var llp = viewModel.curAnswer.aiPercent
+        llp = if (llp != null) (llp * 1000).roundToInt() / 1000.0 else 0.0
+
+        binding.textSentLin.text = ls.toString()
+        binding.textPercLin.text = "${lp}%"
+
+        binding.textSentNeur.text = ns.toString()
+        binding.textPercNeur.text = "${np}%"
+
+        binding.textSentLlama.text = lls.toString()
+        binding.textPercLlama.text = "${llp}%"
 
         return binding.root
 

@@ -17,5 +17,5 @@ data class InnerAPIResponse(
     @SerializedName("res_sent" ) var resSent : Double?                = null,
     @SerializedName("res_perc" ) var resPercent : Double?                = null,
 
-    //@SerializedName("comment"       ) var comment       : String?             = null
+    @SerializedName("comment"       ) var comment       : String?             = null
 )

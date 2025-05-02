@@ -101,7 +101,7 @@
             android:background="#EEEEEE"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textDescLabel" />
+            app:layout_constraintTop_toBottomOf="@+id/textDesc" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/sentimentCard"
@@ -155,7 +155,7 @@
 
                     <com.google.android.material.progressindicator.LinearProgressIndicator
                         android:id="@+id/sentimentProgress2"
-                        android:layout_width="280dp"
+                        android:layout_width="260dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:progress="30" />
