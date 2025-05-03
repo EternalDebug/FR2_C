@@ -33,7 +33,15 @@ class SecondFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentSecondBinding.inflate(inflater, container, false)
-        //resetFields()
+
+        val cn = viewModel.curNews
+        binding.textAuthor.text = cn.author
+        if (cn.publishedAt == null) {
+            cn.publishedAt = "Неизвестно"
+        }
+        binding.textPublished.text = cn.publishedAt
+        binding.textTitle.text = cn.title
+        binding.textDesc.text = cn.description
 
         viewModel.Answer.observe(viewLifecycleOwner, Observer {
             //binding.textSentiment.text = "${it.status}, Сентимент-оценка: ${it.resSent}, Процент: ${it.resPercent}";
@@ -41,7 +49,7 @@ class SecondFragment : Fragment() {
             PutAnswer()
         })
         //Страшный костыль, обеспечивающий сброс интерфейса
-        viewModel.Answer.postValue(InnerAPIResponse())
+        //viewModel.Answer.postValue(InnerAPIResponse())
 
 
         return binding.root
@@ -67,15 +75,6 @@ class SecondFragment : Fragment() {
     }
 
     private fun resetFields() {
-
-        val cn = viewModel.curNews
-        binding.textAuthor.text = cn.author
-        if (cn.publishedAt == null) {
-            cn.publishedAt = "Неизвестно"
-        }
-        binding.textPublished.text = cn.publishedAt
-        binding.textTitle.text = cn.title
-        binding.textDesc.text = cn.description
 
         // Ставим базовое состояние анализа
         binding.textSentiment.visibility = View.VISIBLE

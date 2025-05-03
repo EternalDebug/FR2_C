@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.fr_2c.DataClasses.Articles
+import com.example.fr_2c.DataClasses.InnerAPIResponse
 import com.example.fr_2c.databinding.FragmentThirdBinding
 import java.util.Calendar
 
@@ -60,6 +61,9 @@ class ThirdFragment : Fragment() {
                 //String(binding.textTitle.text.toString().toByteArray(), Charsets.UTF_8);
             viewModel.curNews = Articles(null,tit,au,pub, desc);
             dbViewModel.insert(viewModel.curNews)
+
+            //Страшный костыль, обеспечивающий сброс интерфейса
+            viewModel.Answer.postValue(InnerAPIResponse())
 
             viewModel.getAnswer()
             findNavController().navigate(R.id.action_thirdFragment_to_SecondFragment);

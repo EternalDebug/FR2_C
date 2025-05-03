@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fr_2c.DataClasses.Articles
+import com.example.fr_2c.DataClasses.InnerAPIResponse
 import com.example.fr_2c.databinding.NewsOneBinding
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -41,6 +42,10 @@ class Adaptator : RecyclerView.Adapter<Adaptator.TaskHolder>(){
             // Set card click listener to view article details
             binding.root.setOnClickListener {
                 viewModel.curNews = task
+
+                //Страшный костыль, обеспечивающий сброс интерфейса
+                viewModel.Answer.postValue(InnerAPIResponse())
+
                 viewModel.getAnswer()
                 it.findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
             }
