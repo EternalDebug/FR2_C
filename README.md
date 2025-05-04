@@ -19,3 +19,5 @@ MYAPI=ваш_http_с_поднятой_серверной_частью_работ
 https://newsdata.io/news-sources/russia-business-news-api - API, для которого требуется KEY
 
 MYAPI=http://10.0.2.2:8000/ - если вы подняли серверную часть в локальной сети и запускаете приложение в эмуляторе Android Studio.
+
+Серверная часть системы: https://github.com/EternalDebug/FR2_S
