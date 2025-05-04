@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.fr_2c.DataClasses.InnerAPIResponse
@@ -77,6 +78,7 @@ class SecondFragment : Fragment() {
     private fun resetFields() {
 
         // Ставим базовое состояние анализа
+        binding.textSentiment.text = "Сервер обрабатывает запрос..."
         binding.textSentiment.visibility = View.VISIBLE
         binding.sentimentProgress2.progress = 50
         binding.textSent.text = "0.5"
@@ -100,6 +102,10 @@ class SecondFragment : Fragment() {
             binding.textSent.text = s.toString()
             binding.textPerc.text = "${p}%"
             binding.textComment.text = if (it.comment != null) it.comment else "Null comment"
+        }
+        else if (viewModel.curAnswer.status == "Fail"){
+            binding.textSentiment.text = "Сервер системы недоступен!"
+            Toast.makeText(this.context, "Нет доступа к серверу", Toast.LENGTH_SHORT).show()
         }
         else resetFields()
 

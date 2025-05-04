@@ -1,6 +1,7 @@
 package com.example.fr_2c
 
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.fr_2c.DataClasses.Articles
@@ -59,6 +60,7 @@ class AppViewModel (private val repository: RetroRepository) : ViewModel(){
             }
 
             override fun onFailure(call: Call<com.example.fr_2c.DataClasses.InnerAPIResponse>, t: Throwable) {
+                Answer.postValue(InnerAPIResponse("Fail"))
                 errorMessage.postValue(t.message)
             }
         })
